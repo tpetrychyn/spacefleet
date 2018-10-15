@@ -1,0 +1,15 @@
+.item {
+  width: 80px;
+  height: 80px;
+  background-color: grey;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.slot {
+  width: 80px;
+  height: 80px;
+  background-color: grey;
+  border: 1px solid black;
+  border-radius: 5px;
+}
