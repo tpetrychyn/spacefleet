@@ -2,11 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { beginDrag } from '../actions/dragging'
 import { addItem, removeItem, swapItems } from '../actions/workbench'
+import { calculateRecipe } from './workbenchFilter'
 
 import SupportGem from '../shared/entities/SupportGem'
 
-import ItemComponent from '../inventory/ItemComponent'
-import ItemSlotComponent from '../inventory/ItemSlotComponent'
+import ItemComponent from './ItemComponent'
+import ItemSlotComponent from './ItemSlotComponent'
 
 class Workbench extends React.Component {
   componentDidMount () {
@@ -63,6 +64,15 @@ class Workbench extends React.Component {
               </ItemSlotComponent>
             </div>
           )}
+          <hr />
+          <ItemSlotComponent
+            addItem={this.props.addItem.bind(this)}
+            id={7}
+            onDragOver={(e) => this.onDragOver(e)}
+            onDragLeave={(e) => this.onDragExit(e)}
+            onDragEnd={(e) => this.onDragEnd(e)}>
+            <ItemComponent id={7} item={this.props.recipeItem} onDragStart={this.onDragStart.bind(this)} parent={this} />
+          </ItemSlotComponent>
         </div>
       </div>
     )
@@ -70,7 +80,8 @@ class Workbench extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  ...state
+  ...state,
+  recipeItem: calculateRecipe(state.workbench.slots)
 })
 
 const mapDispatchToProps = dispatch => ({
