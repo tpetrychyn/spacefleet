@@ -9,6 +9,12 @@ export default class Item {
     this.backgroundColor = 'lightgrey'
   }
 
+  clone () {
+    const newItem = Object.assign(Object.create(Object.getPrototypeOf(this)), this)
+    newItem.uuid = uuidv4()
+    return newItem
+  }
+
   getInfo () {
     return 'Item description here'
   }

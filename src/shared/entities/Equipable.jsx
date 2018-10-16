@@ -2,9 +2,9 @@ import Item from './Item'
 import Player from './Player'
 
 export default class Equipable extends Item {
-  constructor () {
+  constructor (name) {
     super()
-    this.name = 'Platebody'
+    this.name = name
     this.sockets = []
     this.maxSockets = 3
     this.buttonText = 'Remove sockets'

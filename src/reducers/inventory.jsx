@@ -3,40 +3,38 @@ export default (state = {
   slots: Array(20).fill(null, 0)
 }, action) => {
   const slotsCopy = state.slots.slice()
+  let found
   switch (action.type) {
     case 'INVENTORY_ADD_ITEM':
-      let findSlot = action.payload.slot || state.slots.findIndex(s => !s)
-      slotsCopy[findSlot] = action.payload.item
+      let item = action.payload.item
+      item.amount = action.payload.amount || 1
+      let existingItem = state.slots.find(s => s && s.name === item.name)
+      if (item.isStackable && existingItem) {
+        existingItem.amount += action.payload.amount
+      } else {
+        found = action.payload.slot || state.slots.findIndex(s => !s) // appropriate slot
+        slotsCopy[found] = item
+      }
       return {
         slots: slotsCopy
       }
     case 'INVENTORY_REMOVE_ITEM':
-      findSlot = state.slots.findIndex(s => {
-        return s && s.uuid === action.payload.uuid
-      })
-      slotsCopy[findSlot] = null
-      return {
-        slots: slotsCopy
-      }
-    case 'INVENTORY_SWAP_ITEMS':
-      const { fromItem, toItem } = action.payload
-      const fromSlot = getSlot(state.slots, fromItem)
-      const toSlot = getSlot(state.slots, toItem)
+      item = action.payload.item
+      found = state.slots.findIndex(s => s && s.uuid === item.uuid)
+      if (found === -1) found = state.slots.findIndex(s => s && s.name === item.name)
+      if (found > -1) {
+        let itemCopy = slotsCopy[found].clone()
+        itemCopy.amount -= action.payload.amount
 
-      slotsCopy[fromSlot] = toItem
-      slotsCopy[toSlot] = fromItem
+        if (itemCopy.amount <= 0) {
+          itemCopy = null
+        }
+        slotsCopy[found] = itemCopy
+      }
       return {
         slots: slotsCopy
       }
     default:
       return state
   }
-}
-
-const getSlot = (slots, item) => {
-  return slots.findIndex(i => i && i.uuid === item.uuid)
-}
-
-const getSlotOfStackable = (slots, item) => {
-  return slots.findIndex(i => i && i.name === item.name)
 }

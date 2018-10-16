@@ -1,26 +1,20 @@
-export const addItem = (item, slot) => dispatch => {
+export const addItem = (item, slot, amount = 1) => dispatch => {
   dispatch({
     type: 'INVENTORY_ADD_ITEM',
     payload: {
       item,
-      slot
+      slot,
+      amount
     }
   })
 }
 
-export const removeItem = (item) => dispatch => {
+export const removeItem = (item, amount = item.amount) => dispatch => {
   dispatch({
     type: 'INVENTORY_REMOVE_ITEM',
-    payload: item
-  })
-}
-
-export const swapItems = (fromItem, toItem) => dispatch => {
-  dispatch({
-    type: 'INVENTORY_SWAP_ITEMS',
     payload: {
-      fromItem,
-      toItem
+      item,
+      amount
     }
   })
 }
