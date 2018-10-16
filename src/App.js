@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import './App.css'
 
-import Item from './Item'
+import GameScreen from './GameScreen'
 
 class App extends Component {
   render () {
     return (
       <div className='App container'>
-        <Item />
+        <GameScreen />
       </div>
     )
   }

@@ -5,6 +5,7 @@ export default class Gem extends Item {
     super()
     this.name = 'GEM_BASECLASS'
     this.effect = this.effect
+    this.backgroundColor = 'lightgreen'
   }
 
   getInfo () {

@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "react": "^16.5.2",
+    "react-beautiful-dnd": "^9.0.2",
+    "react-dnd": "^5.0.0",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
     "react-scripts": "2.0.4",
@@ -26,5 +28,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {}
 }

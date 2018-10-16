@@ -1,5 +1,5 @@
 import Item from './Item'
-import InventoryService from '../services/InventoryService'
+import Player from './Player'
 
 export default class Equipable extends Item {
   constructor () {
@@ -8,6 +8,7 @@ export default class Equipable extends Item {
     this.sockets = []
     this.maxSockets = 3
     this.buttonText = 'Remove sockets'
+    this.backgroundColor = 'lightcoral'
   }
 
   getInfo () {
@@ -15,9 +16,8 @@ export default class Equipable extends Item {
   }
 
   itemButton (me) {
-    console.log(this, me)
     me.sockets.forEach(gem => {
-      InventoryService.addItem(gem)
+      Player.inventory.addItem(gem)
     })
     me.sockets = []
     this.forceUpdate()

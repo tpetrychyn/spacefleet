@@ -2,10 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import './item.css'
-import Gem from './entities/Gem'
-import SupportGem from './entities/SupportGem'
-import InventoryService from './services/InventoryService'
-import Equipable from './entities/Equipable'
+import Gem from './shared/entities/Gem'
+import SupportGem from './shared/entities/SupportGem'
+import Equipable from './shared/entities/Equipable'
+import Player from './shared/entities/Player'
+import Inventory from './inventory/Inventory'
+import Workbench from './inventory/Workbench'
 
 class OnAttackGem extends Gem {
   constructor () {
@@ -67,7 +69,7 @@ class AddDamage extends Gem {
 class BuffGem extends SupportGem {
   constructor () {
     super()
-    this.name = 'Buff Gem'
+    this.name = 'Iridium'
     this.level = 1
     this.rarity = 1
     this.link = null
@@ -82,7 +84,8 @@ class BuffGem extends SupportGem {
 class DoubleHit extends OnAttackGem {
   constructor () {
     super()
-    this.name = 'Double hit chance'
+    this.name = 'Space Dust'
+    this.isStackable = true
   }
 
   effect (sword) {
@@ -192,14 +195,28 @@ class Sword {
   }
 }
 
-export default class Item extends React.Component {
+function getSourceType (target) {
+  if (target.closest('.crafting')) return 'crafting'
+  if (target.closest('.inventory')) return 'inventory'
+}
+
+function getTargetType (target) {
+  // ordered in drop priorty
+  if (target.closest('.crafting')) return 'crafting'
+  if (target.closest('.item')) return 'item'
+  if (target.closest('.inventory')) return 'inventory'
+}
+
+export default class GameScreen extends React.Component {
   constructor () {
     super()
 
     this.state = {
       sword: new Sword(),
+      dragFrom: null,
       dragging: null,
-      inventory: InventoryService,
+      // inventory: Player.inventory,
+      // craftWindow: Player.craftWindow,
       infoText: '',
       hoverItem: null
     }
@@ -207,14 +224,15 @@ export default class Item extends React.Component {
   }
 
   componentDidMount () {
-    this.setState(prev => ({
-      inventory: prev.inventory
-        .addItem(new BuffGem())
-        .addItem(new DoubleHit())
-        .addItem(new Equipable())
-    }))
+    // this.setState(prev => ({
+    //   inventory: prev.inventory
+    //     .addItem(new BuffGem())
+    //     .addItem(new DoubleHit())
+    //     .addItem(new Equipable())
+    //     .addItem(new DoubleHit(), 10)
+    // }))
 
-    this.attack()
+    // this.attack()
   }
 
   attack () {
@@ -235,18 +253,18 @@ export default class Item extends React.Component {
 
   onDragOver (e) {
     if (!e.target.className.includes('droppable')) return
-    e.target.style.background = 'white'
+    // e.target.style.background = 'white'
     e.preventDefault()
   }
 
   onDragExit (e) {
     if (!e.target.className.includes('droppable')) return
-    e.target.style.background = 'grey'
+    // e.target.style.background = 'grey'
     e.preventDefault()
   }
 
   onDragStart (e, item) {
-    this.setState({ dragging: item })
+    this.setState({ dragFrom: getSourceType(e.target), dragging: item })
   }
 
   onDragEnd () {
@@ -254,44 +272,55 @@ export default class Item extends React.Component {
   }
 
   onDrop (e) {
-    for (let ele of ReactDOM.findDOMNode(this).getElementsByClassName('droppable')) {
-      ele.style.background = 'grey'
+    const targetType = getTargetType(e.target)
+    const sourceType = this.state.dragFrom
+    if (sourceType === targetType) {
+      return
     }
-    this.state.inventory.interactItemAndSlot(this.state.dragging, e.target.id)
+
+    if (targetType === 'crafting') {
+      Player.craftWindow.addItem(this.state.hoverItem)
+    }
+    console.log(targetType)
+    for (let ele of ReactDOM.findDOMNode(this).getElementsByClassName('droppable')) {
+      // ele.style.background = 'grey'
+    }
+    this.state.inventory.interactItemAndSlot(this.state.dragging, e.target.closest('.slot').id)
   }
 
   onHover (item) {
     if (item) { this.setState({ hoverItem: item }) }
   }
 
+  addItem () {
+    this.state.inventory.addItem(new AddSpeed(), 4)
+    this.forceUpdate()
+  }
+
   render () {
     return (
       <div className='row'>
-        <div className='col-6'>
-          {this.state.inventory.slots.map((item, i) =>
-            <div className={(i + 1) % 4 === 0 ? 'row' : undefined} key={i} onMouseOver={this.onHover.bind(this, item)}>
-              <ItemSlot
-                id={i}
-                onDragOver={(e) => this.onDragOver(e)}
-                onDragLeave={(e) => this.onDragExit(e)}
-                onDrop={(e) => this.onDrop(e)}
-                onDragEnd={(e) => this.onDragEnd(e)}>
-                <ItemView id={i} item={item} onDragStart={this.onDragStart.bind(this)} />
-              </ItemSlot>
-            </div>
-          )}
+        <div className='col-7'>
+          <Inventory />
         </div>
-        <div className='col-6'>
+        <div className='col-5'>
+          <Workbench />
+        </div>
+        {/* <div className='col-4'>
           <h4>Hover for item description</h4>
           <hr />
           {this.state.hoverItem &&
             <span>
               <h3>{this.state.hoverItem.name}</h3>
               <h5>{this.state.hoverItem.getInfo()}</h5>
-              <button onClick={this.state.hoverItem.itemButton && this.state.hoverItem.itemButton.bind(this, this.state.hoverItem)}>{this.state.hoverItem.buttonText}</button>
+              {this.state.hoverItem.itemButton
+                ? <button onClick={this.state.hoverItem.itemButton.bind(this, this.state.hoverItem)}>{this.state.hoverItem.buttonText}</button>
+                : ''
+              }
+
             </span>
           }
-        </div>
+        </div> */}
         <div className='col-12'>
           <hr />
           <button onClick={this.attack.bind(this)}>Attack</button>
@@ -301,29 +330,6 @@ export default class Item extends React.Component {
         </div>
       </div>
 
-    )
-  }
-}
-
-const ItemSlot = (props) => (
-  <div
-    className='droppable slot float-left'
-    id={props.id}
-    onDragOver={props.onDragOver}
-    onDragLeave={props.onDragLeave}
-    onDrop={props.onDrop}
-    onDragEnd={props.onDragEnd}>
-    {props.children}
-  </div>
-)
-
-class ItemView extends React.Component {
-  render () {
-    if (!this.props.item) return ''
-    return (
-      <div id={this.props.id} className='item text-center draggable droppable' draggable onDragStart={(e) => this.props.onDragStart(e, this.props.item)}>
-        {this.props.item.name}
-      </div>
     )
   }
 }
