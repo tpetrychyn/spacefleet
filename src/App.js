@@ -6,7 +6,7 @@ import GameScreen from './GameScreen'
 class App extends Component {
   render () {
     return (
-      <div className='App container'>
+      <div className=''>
         <GameScreen />
       </div>
     )

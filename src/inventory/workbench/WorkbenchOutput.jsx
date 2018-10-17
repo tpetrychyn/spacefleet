@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { beginDrag } from '../../actions/dragging'
-import { addItem, removeItem } from '../../actions/workbench'
+import { beginDrag } from '../../@actions/dragging'
+import { addItem, removeItem } from '../../@actions/workbench'
 import { calculateRecipe } from './workbenchFilter'
 
 import ItemSlotComponent from '../ItemSlotComponent'

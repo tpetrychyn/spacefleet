@@ -1,12 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { beginDrag } from '../../actions/dragging'
-import { addItem, removeItem } from '../../actions/inventory'
+
+import { beginDrag } from '../../@actions/dragging'
+import { addItem, removeItem, openInventory, closeInventory } from '../../@actions/inventory'
+import { openWorkbench } from '../../@actions/workbench'
 
 import SupportGem from '../../shared/entities/SupportGem'
 
 import ItemSlotComponent from '../ItemSlotComponent'
 import Gem from '../../shared/entities/Gem'
+
+import './Inventory.css'
+import { ReactComponent as WorkbenchIcon } from './workbench.svg'
 
 class InventoryComponent extends React.Component {
   componentDidMount () {
@@ -67,11 +72,32 @@ class InventoryComponent extends React.Component {
     this.props.addItem(gem, null, 6)
   }
 
+  closeInventory () {
+    if (!this.props.workbench.isOpen) {
+      this.props.closeInventory()
+    }
+  }
+
+  openInventory () {
+    if (!this.props.inventory.isOpen) {
+      this.props.openInventory()
+    }
+  }
+
   render () {
     return (
-      <div className='row'>
+      <div className={`row inventory ${this.props.inventory.isOpen ? 'slide-in' : 'slide-out'}`}
+        onMouseLeave={this.closeInventory.bind(this)}
+        onMouseOver={this.props.openInventory}
+        onDragOver={this.openInventory.bind(this)}>
         <div className='col-12'>
-          <h3>Inventory</h3>
+          <h3>Inventory
+            <span className='workbench-button' onClick={this.props.openWorkbench}>
+              <button type='button' className='close' aria-label='Close'>
+                <WorkbenchIcon width={35} height={35} />
+              </button>
+            </span>
+          </h3>
           {this.props.inventory.slots.map((item, i) =>
             <div className={(i + 1) % 5 === 0 ? 'row' : undefined} key={i} onMouseOver={this.onHover.bind(this, item)}>
               <ItemSlotComponent
@@ -98,7 +124,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addItem: (item, slot, amount) => dispatch(addItem(item, slot, amount)),
   removeItem: (item, amount) => dispatch(removeItem(item, amount)),
-  beginDrag: (item, slot, source) => dispatch(beginDrag(item, slot, source))
+  beginDrag: (item, slot, source) => dispatch(beginDrag(item, slot, source)),
+  openInventory: () => dispatch(openInventory()),
+  closeInventory: () => dispatch(closeInventory()),
+  openWorkbench: () => dispatch(openWorkbench())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InventoryComponent)

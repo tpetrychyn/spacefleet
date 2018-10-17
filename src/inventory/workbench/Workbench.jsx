@@ -1,12 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { beginDrag } from '../../actions/dragging'
-import { addItem, removeItem } from '../../actions/workbench'
+import { beginDrag } from '../../@actions/dragging'
+import { addItem, removeItem, closeWorkbench } from '../../@actions/workbench'
+import { closeInventory } from '../../@actions/inventory'
 
 import SupportGem from '../../shared/entities/SupportGem'
 
 import ItemSlotComponent from '../ItemSlotComponent'
 import WorkbenchOutput from './WorkbenchOutput'
+
+import './Workbench.css'
 
 class Workbench extends React.Component {
   componentDidMount () {
@@ -49,11 +52,23 @@ class Workbench extends React.Component {
     this.props.beginDrag(item, slot, this)
   }
 
+  closeWorkbenchAndInventory () {
+    this.props.closeInventory()
+    this.props.closeWorkbench()
+  }
+
   render () {
+    if (!this.props.workbench.isOpen) return ''
     return (
-      <div className='row'>
+      <div className='row workbench'>
         <div className='col-12'>
-          <h3>Workbench</h3>
+          <h3>Workbench
+            <span className='close-button' onClick={this.closeWorkbenchAndInventory.bind(this)}>
+              <button type='button' className='close' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+              </button>
+            </span>
+          </h3>
           {this.props.workbench.slots.map((item, i) =>
             <div className={(i + 1) % 3 === 0 ? 'row' : undefined} key={i} onMouseOver={this.onHover.bind(this, item)}>
               <ItemSlotComponent
@@ -81,7 +96,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addItem: (item, slot, amount) => dispatch(addItem(item, slot, amount)),
   removeItem: (item, amount) => dispatch(removeItem(item, amount)),
-  beginDrag: (item, slot, source) => dispatch(beginDrag(item, slot, source))
+  beginDrag: (item, slot, source) => dispatch(beginDrag(item, slot, source)),
+  closeWorkbench: () => dispatch(closeWorkbench()),
+  closeInventory: () => dispatch(closeInventory())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workbench)

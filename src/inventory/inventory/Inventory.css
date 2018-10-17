@@ -1,0 +1,39 @@
+.inventory {
+  background-color: rgba(255,255,255, 0.75);
+  width: 555px;
+  transform: translateX(-490px);
+  -webkit-transform: translateX(-490px);
+}
+
+.workbench-button {
+    position: absolute;
+    right: 35px;
+}
+
+.slide-in {
+    animation: slide-in 0.5s forwards;
+    /* -webkit-animation: slide-in 0.5s forwards; */
+}
+
+.slide-out {
+    animation: slide-out 0.5s forwards;
+    /* -webkit-animation: slide-out 0.5s forwards; */
+}
+    
+@keyframes slide-in {
+    100% { transform: translateX(30px); will-change: transform; opacity: 1px;}
+}
+
+@-webkit-keyframes slide-in {
+    100% { -webkit-transform: translateX(30px); will-change: transform; opacity: 1;}
+}
+    
+@keyframes slide-out {
+    0% { transform: translateX(30px); will-change: transform; }
+    100% { transform: translateX(-490px); will-change: transform; opacity: 0.8; }
+}
+
+@-webkit-keyframes slide-out {
+    0% { -webkit-transform: translateX(30px); will-change: transform; }
+    100% { -webkit-transform: translateX(-490px); will-change: transform; opacity: 0.8; }
+}

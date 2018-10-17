@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Inventory from './inventory/inventory/Inventory'
+import Planet from './planet/Planet'
 import Workbench from './inventory/workbench/Workbench'
 
 // class LinkGroup {
@@ -102,10 +103,13 @@ export default class GameScreen extends React.Component {
   render () {
     return (
       <div className='row'>
-        <div className='col-7'>
+        <div className='col-12'>
+          <Planet />
+        </div>
+        <div style={{ zIndex: 1000 }}>
           <Inventory />
         </div>
-        <div className='col-5'>
+        <div style={{ zIndex: 1000 }}>
           <Workbench />
         </div>
       </div>

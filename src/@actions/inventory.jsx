@@ -18,3 +18,17 @@ export const removeItem = (item, amount = item.amount) => dispatch => {
     }
   })
 }
+
+export const openInventory = () => dispatch => {
+  dispatch({
+    type: 'INVENTORY_OPEN',
+    payload: {}
+  })
+}
+
+export const closeInventory = () => dispatch => {
+  dispatch({
+    type: 'INVENTORY_CLOSE',
+    payload: {}
+  })
+}

@@ -18,3 +18,17 @@ export const removeItem = (item, amount = item.amount) => dispatch => {
     }
   })
 }
+
+export const openWorkbench = () => dispatch => {
+  dispatch({
+    type: 'WORKBENCH_OPEN',
+    payload: {}
+  })
+}
+
+export const closeWorkbench = () => dispatch => {
+  dispatch({
+    type: 'WORKBENCH_CLOSE',
+    payload: {}
+  })
+}
