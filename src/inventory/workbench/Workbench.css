@@ -2,7 +2,10 @@
   background-color: rgba(255,255,255, 0.75);
   width: 350px;
   margin-left: 100px;
-  right: 50px;
+  top: 50px;
+  left: 500px;
+  position: absolute;
+  padding-bottom: 20px;
 }
 
 .close-button span {

@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { beginDrag } from '../../@actions/dragging'
-import { addItem, removeItem, closeWorkbench } from '../../@actions/workbench'
-import { closeInventory } from '../../@actions/inventory'
+import { addItem, removeItem } from '../../@actions/workbench'
+import { closeWorkbench, closeInventory } from '../../@actions/ui'
 
 import SupportGem from '../../shared/entities/SupportGem'
 
@@ -58,7 +58,7 @@ class Workbench extends React.Component {
   }
 
   render () {
-    if (!this.props.workbench.isOpen) return ''
+    if (!this.props.ui.workbenchIsOpen) return ''
     return (
       <div className='row workbench'>
         <div className='col-12'>
@@ -70,7 +70,7 @@ class Workbench extends React.Component {
             </span>
           </h3>
           {this.props.workbench.slots.map((item, i) =>
-            <div className={(i + 1) % 3 === 0 ? 'row' : undefined} key={i} onMouseOver={this.onHover.bind(this, item)}>
+            <div className={(i + 1) % 3 === 0 ? 'row' : undefined} key={i}>
               <ItemSlotComponent
                 id={i}
                 item={item}

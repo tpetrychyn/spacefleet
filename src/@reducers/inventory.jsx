@@ -1,21 +1,10 @@
 
 export default (state = {
-  slots: Array(20).fill(null, 0),
-  isOpen: false
+  slots: Array(20).fill(null, 0)
 }, action) => {
   const slotsCopy = state.slots.slice()
   let found
   switch (action.type) {
-    case 'INVENTORY_OPEN':
-      return {
-        ...state,
-        isOpen: true
-      }
-    case 'INVENTORY_CLOSE':
-      return {
-        ...state,
-        isOpen: false
-      }
     case 'INVENTORY_ADD_ITEM':
       let item = action.payload.item
       item.amount = action.payload.amount || 1

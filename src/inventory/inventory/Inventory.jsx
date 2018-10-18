@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { beginDrag } from '../../@actions/dragging'
-import { addItem, removeItem, openInventory, closeInventory } from '../../@actions/inventory'
-import { openWorkbench } from '../../@actions/workbench'
+import { addItem, removeItem } from '../../@actions/inventory'
+import { openInventory, closeInventory, openWorkbench } from '../../@actions/ui'
 
 import SupportGem from '../../shared/entities/SupportGem'
 
@@ -12,6 +12,7 @@ import Gem from '../../shared/entities/Gem'
 
 import './Inventory.css'
 import { ReactComponent as WorkbenchIcon } from './workbench.svg'
+import { Spring } from 'react-spring'
 
 class InventoryComponent extends React.Component {
   componentDidMount () {
@@ -73,46 +74,52 @@ class InventoryComponent extends React.Component {
   }
 
   closeInventory () {
-    if (!this.props.workbench.isOpen) {
+    if (!this.props.ui.workbenchIsOpen) {
       this.props.closeInventory()
     }
   }
 
   openInventory () {
-    if (!this.props.inventory.isOpen) {
+    if (!this.props.ui.inventoryIsOpen) {
       this.props.openInventory()
     }
   }
 
   render () {
     return (
-      <div className={`row inventory ${this.props.inventory.isOpen ? 'slide-in' : 'slide-out'}`}
-        onMouseLeave={this.closeInventory.bind(this)}
-        onMouseOver={this.props.openInventory}
-        onDragOver={this.openInventory.bind(this)}>
-        <div className='col-12'>
-          <h3>Inventory
-            <span className='workbench-button' onClick={this.props.openWorkbench}>
-              <button type='button' className='close' aria-label='Close'>
-                <WorkbenchIcon width={35} height={35} />
-              </button>
-            </span>
-          </h3>
-          {this.props.inventory.slots.map((item, i) =>
-            <div className={(i + 1) % 5 === 0 ? 'row' : undefined} key={i} onMouseOver={this.onHover.bind(this, item)}>
-              <ItemSlotComponent
-                id={i}
-                item={item}
-                onDragOver={(e) => this.onDragOver(e)}
-                onDrop={this.onDrop.bind(this)}
-                onDrag={this.onDrag.bind(this)}
-              />
+      <Spring
+        from={{ opacity: 0, transform: 'translateX(-500px)' }}
+        to={{ opacity: 1, transform: this.props.ui.inventoryIsOpen ? 'translateX(10px)' : 'translateX(-500px)' }}>
+        {props =>
+          <div className='row inventory' style={props}
+            onMouseLeave={this.closeInventory.bind(this)}
+            onMouseOver={this.openInventory.bind(this)}
+            onDragOver={this.openInventory.bind(this)}>
+            <div className='col-12'>
+              <h3>Inventory
+                <span className='workbench-button' onClick={this.props.openWorkbench}>
+                  <button type='button' className='close' aria-label='Close'>
+                    <WorkbenchIcon width={35} height={35} />
+                  </button>
+                </span>
+              </h3>
+              {this.props.inventory.slots.map((item, i) =>
+                <div className={(i + 1) % 5 === 0 ? 'row' : undefined} key={i}>
+                  <ItemSlotComponent
+                    id={i}
+                    item={item}
+                    onDragOver={(e) => this.onDragOver(e)}
+                    onDrop={this.onDrop.bind(this)}
+                    onDrag={this.onDrag.bind(this)}
+                  />
+                </div>
+              )}
+              <button className='btn btn-md btn-primary' onClick={this.addItem.bind(this)}>Add Item Button</button>
+              <button className='btn btn-md btn-primary' onClick={this.addItem2.bind(this)}>Add Item Button</button>
             </div>
-          )}
-          <button className='btn btn-md btn-primary' onClick={this.addItem.bind(this)}>Add Item Button</button>
-          <button className='btn btn-md btn-primary' onClick={this.addItem2.bind(this)}>Add Item Button</button>
-        </div>
-      </div>
+          </div>}
+      </Spring>
+
     )
   }
 }

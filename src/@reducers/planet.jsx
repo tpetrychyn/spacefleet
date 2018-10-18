@@ -1,10 +1,10 @@
 export default (state = {
-  slots: Array(6).fill(null, 0)
+  slots: Array(5).fill(null, 0)
 }, action) => {
   const slotsCopy = state.slots.slice()
   let found
   switch (action.type) {
-    case 'WORKBENCH_ADD_ITEM':
+    case 'PLANET_ADD_ITEM':
       let item = action.payload.item
       item.amount = action.payload.amount || 1
       let existingItem = state.slots.find(s => s && s.name === item.name)
@@ -18,7 +18,7 @@ export default (state = {
         ...state,
         slots: slotsCopy
       }
-    case 'WORKBENCH_REMOVE_ITEM':
+    case 'PLANET_REMOVE_ITEM':
       item = action.payload.item
       found = state.slots.findIndex(s => s && s.uuid === item.uuid)
       if (found === -1) found = state.slots.findIndex(s => s && s.name === item.name)
