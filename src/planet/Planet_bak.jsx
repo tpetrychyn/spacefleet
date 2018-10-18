@@ -3,7 +3,7 @@ import { Spring, Keyframes, config, animated } from 'react-spring'
 import { TimingAnimation, Easing } from 'react-spring/dist/addons'
 import delay from 'delay'
 
-import './Planet.css'
+import './Planet_bak.css'
 
 function toRadians (angle) {
   return angle * (Math.PI / 180)
@@ -32,11 +32,12 @@ export default class Planet extends React.Component {
           <div className='atmosphere'>
             <div className='planet'>
               <div className='earthOrbit'>
-                <Container
+              <div className='earth'></div>
+                {/* <Container
                   impl={TimingAnimation}
                   config={{ duration: 2000, easing: Easing.linear }}>
-                  {({ x }) => <div className='earth' style={{ transform: `translate(${500 * Math.cos(Math.sin(x / 500))}px, ${-500 * Math.sin(Math.cos(x / 500))}px)` }}>{1 - Math.cos(x / 500)}</div>}
-                </Container>
+                  {({ x }) => }
+                </Container> */}
               </div>
             </div>
           </div>

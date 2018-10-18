@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { beginDrag } from '../../@actions/dragging'
+import { beginDrag, endDrag } from '../../@actions/dragging'
 import { addItem, removeItem } from '../../@actions/inventory'
 import { openInventory, closeInventory, openWorkbench } from '../../@actions/ui'
 
@@ -55,10 +55,20 @@ class InventoryComponent extends React.Component {
       item && dragSource.props.addItem(item, dragSlot, item.amount)
       this.props.addItem(dragItem, slot, dragItem.amount)
     }
+
+    this.props.endDrag()
   }
 
   onDrag (item, slot) {
     this.props.beginDrag(item, slot, this)
+  }
+
+  onClick(item, slot) {
+    if (this.props.dragging.dragItem) {
+      this.onDrop(item, slot)
+    } else {
+      this.onDrag(item, slot)
+    }
   }
 
   addItem () {
@@ -111,6 +121,7 @@ class InventoryComponent extends React.Component {
                     onDragOver={(e) => this.onDragOver(e)}
                     onDrop={this.onDrop.bind(this)}
                     onDrag={this.onDrag.bind(this)}
+                    onClick={this.onClick.bind(this)}
                   />
                 </div>
               )}
@@ -132,6 +143,7 @@ const mapDispatchToProps = dispatch => ({
   addItem: (item, slot, amount) => dispatch(addItem(item, slot, amount)),
   removeItem: (item, amount) => dispatch(removeItem(item, amount)),
   beginDrag: (item, slot, source) => dispatch(beginDrag(item, slot, source)),
+  endDrag: () => dispatch(endDrag()),
   openInventory: () => dispatch(openInventory()),
   closeInventory: () => dispatch(closeInventory()),
   openWorkbench: () => dispatch(openWorkbench())

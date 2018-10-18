@@ -25,6 +25,13 @@ class WorkbenchOutput extends React.Component {
     this.props.beginDrag(item, slot, this)
   }
 
+  onClick(item, slot) {
+    if (this.props.dragging.dragItem) {
+    } else {
+      this.onDrag(item, slot)
+    }
+  }
+
   onDropCallback () {
     const recipe = this.props.recipe
     for (let item of recipe.costs) {
@@ -42,7 +49,8 @@ class WorkbenchOutput extends React.Component {
             addItem={this.props.addItem.bind(this)}
             onDragOver={(e) => e.preventDefault()}
             onDrag={this.onDrag.bind(this)}
-            onDrop={() => {}} />
+            onDrop={() => {}}
+            onClick={this.onClick.bind(this)} />
         </div>
       </div>
     )

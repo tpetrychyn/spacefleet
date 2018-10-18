@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { beginDrag } from '../@actions/dragging'
+import { beginDrag, endDrag } from '../@actions/dragging'
 import { addItem, removeItem } from '../@actions/planet'
 
 import ItemSlotComponent from '../inventory/ItemSlotComponent'
@@ -105,10 +105,20 @@ class Planet extends React.Component {
       item && dragSource.props.addItem(item, dragSlot, item.amount)
       this.props.addItem(dragItem, slot, dragItem.amount)
     }
+
+    this.props.endDrag()
   }
 
   onDrag (item, slot) {
     this.props.beginDrag(item, slot, this)
+  }
+
+  onClick(item, slot) {
+    if (this.props.dragging.dragItem) {
+      this.onDrop(item, slot)
+    } else {
+      this.onDrag(item, slot)
+    }
   }
 
   render () {
@@ -132,6 +142,7 @@ class Planet extends React.Component {
                 onDragOver={(e) => e.preventDefault()}
                 onDrag={this.onDrag.bind(this)}
                 onDrop={this.onDrop.bind(this)}
+                onClick={this.onClick.bind(this)}
                 backgroundColor={'grey'} />
             </div>
           )}
@@ -146,7 +157,8 @@ class Planet extends React.Component {
 const mapDispatchToProps = dispatch => ({
   addItem: (item, slot, amount) => dispatch(addItem(item, slot, amount)),
   removeItem: (item, amount) => dispatch(removeItem(item, amount)),
-  beginDrag: (item, slot, source) => dispatch(beginDrag(item, slot, source))
+  beginDrag: (item, slot, source) => dispatch(beginDrag(item, slot, source)),
+  endDrag: () => dispatch(endDrag())
 })
 
 const mapStateToProps = state => ({

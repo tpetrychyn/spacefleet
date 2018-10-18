@@ -12,6 +12,13 @@ class ItemComponent extends React.Component {
     this.props.onDrag(e, this.props.item)
   }
 
+  onClick (e) {
+    if (this.props.dragging.dragItem !== this.props.item) {
+      e.stopPropagation()
+      this.props.onClick(e, this.props.item)
+    }
+  }
+
   render () {
     const item = this.props.item
     if (!item) return ''
@@ -20,7 +27,8 @@ class ItemComponent extends React.Component {
         className='item text-center draggable'
         draggable
         onDragStart={e => this.onDrag(e)}
-        onDrop={(e) => this.onDrop(e)}>
+        onDrop={(e) => this.onDrop(e)}
+        onClick={(e) => this.onClick(e)}>
         <div className='item-name droppable'>{item.name}</div>
         <div className='item-body droppable' style={{ 'backgroundColor': item.backgroundColor }}>
           <span className='item-quantity align-bottom droppable'>{item.isStackable ? item.amount : ''}</span>
