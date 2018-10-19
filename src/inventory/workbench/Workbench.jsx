@@ -54,7 +54,7 @@ class Workbench extends React.Component {
     this.props.beginDrag(item, slot, this)
   }
 
-  onClick(item, slot) {
+  onClick (item, slot) {
     if (this.props.dragging.dragItem) {
       this.onDrop(item, slot)
     } else {

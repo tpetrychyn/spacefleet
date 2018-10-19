@@ -24,7 +24,7 @@ class InventoryComponent extends React.Component {
     this.props.addItem(gem2)
 
     const gem3 = new Gem()
-    gem3.name = 'Stackable'
+    gem3.name = 'Metal Scraps'
     gem3.isStackable = true
     gem3.amount = 5
     this.props.addItem(gem3)
@@ -40,7 +40,7 @@ class InventoryComponent extends React.Component {
   }
 
   onDrop (item, slot) {
-    const { dragItem, dragSlot, dragSource } = this.props.dragging
+    var { dragItem, dragSlot, dragSource } = this.props.dragging
 
     if (item === dragItem) return
 
@@ -63,7 +63,7 @@ class InventoryComponent extends React.Component {
     this.props.beginDrag(item, slot, this)
   }
 
-  onClick(item, slot) {
+  onClick (item, slot) {
     if (this.props.dragging.dragItem) {
       this.onDrop(item, slot)
     } else {

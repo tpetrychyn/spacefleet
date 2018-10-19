@@ -1,4 +1,3 @@
-
 export default (state = {
   slots: Array(20).fill(null, 0)
 }, action) => {

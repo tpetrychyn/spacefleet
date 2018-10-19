@@ -28,7 +28,8 @@ class ItemComponent extends React.Component {
         draggable
         onDragStart={e => this.onDrag(e)}
         onDrop={(e) => this.onDrop(e)}
-        onClick={(e) => this.onClick(e)}>
+        onClick={(e) => this.onClick(e)}
+        style={{ opacity: this.props.dragging.dragItem === this.props.item ? '0.6' : '1' }}>
         <div className='item-name droppable'>{item.name}</div>
         <div className='item-body droppable' style={{ 'backgroundColor': item.backgroundColor }}>
           <span className='item-quantity align-bottom droppable'>{item.isStackable ? item.amount : ''}</span>

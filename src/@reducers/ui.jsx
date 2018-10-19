@@ -1,9 +1,15 @@
 
 export default (state = {
   inventoryIsOpen: false,
-  workbenchIsOpen: false
+  workbenchIsOpen: false,
+  gamestate: 'battle'
 }, action) => {
   switch (action.type) {
+    case 'SET_GAME_STATE':
+      return {
+        ...state,
+        gamestate: action.payload.gamestate
+      }
     case 'UI_OPEN_INVENTORY':
       return {
         ...state,

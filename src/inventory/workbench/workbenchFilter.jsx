@@ -23,13 +23,13 @@ export const calculateRecipe = (items) => {
 
 const recipes = [
   {
-    item: new Equipable('Red Platebody'),
+    item: new Equipable('Small Satellite'),
     costs: [
       { name: 'Double Hit', quantity: 2 }
     ]
   },
   {
-    item: new Equipable('Blue Platebody'),
+    item: new Equipable('Large Satellite'),
     costs: [
       { name: 'Level +1', quantity: 1 },
       { name: 'Space Dust', quantity: 10 }

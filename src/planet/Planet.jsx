@@ -51,8 +51,8 @@ class Planet extends React.Component {
       if (!ship) continue
       ctx.save()
       ctx.translate(width / 2, height + height / 2)
-      ctx.rotate(Math.PI / 180 * (dt - index*500) * index*100/2)
-      ctx.translate(width / 2 + (50*index), 0)
+      ctx.rotate(Math.PI / 180 * (dt - index * 500) * index * 100 / 2)
+      ctx.translate(width / 2 + (50 * index), 0)
       ctx.drawImage(this.earth, -12, -12)
       ctx.restore()
     }
@@ -71,11 +71,11 @@ class Planet extends React.Component {
 
     ctx.restore()
 
-    const grd =  ctx.createRadialGradient(66.000, 108.000, 0.000, 165.000, 132.900, 150.000);
+    const grd = ctx.createRadialGradient(66.000, 108.000, 0.000, 165.000, 132.900, 150.000)
     // Add colors
-    grd.addColorStop(0.000, 'rgba(162, 65, 242, 1.000)');
-    grd.addColorStop(0.418, 'rgba(216, 51, 234, 1.000)');
-    grd.addColorStop(0.987, 'rgba(233, 127, 255, 1.000)');
+    grd.addColorStop(0.000, 'rgba(162, 65, 242, 1.000)')
+    grd.addColorStop(0.418, 'rgba(216, 51, 234, 1.000)')
+    grd.addColorStop(0.987, 'rgba(233, 127, 255, 1.000)')
     ctx.beginPath()
     ctx.fillStyle = grd
     ctx.arc(width / 2, height + height / 2, width / 2, 0, Math.PI * 2, false) // Earth orbit
@@ -113,7 +113,7 @@ class Planet extends React.Component {
     this.props.beginDrag(item, slot, this)
   }
 
-  onClick(item, slot) {
+  onClick (item, slot) {
     if (this.props.dragging.dragItem) {
       this.onDrop(item, slot)
     } else {
@@ -128,25 +128,25 @@ class Planet extends React.Component {
           <h3>Explore Planet</h3>
         </div>
         <div className='col-12 text-center'>
-        <div style={{ position: 'absolute', zIndex: '-1000' }}>
-          <canvas id='canvas' width={window.innerWidth} height={window.innerHeight} style={{ border: '1pxsolid #000000' }} />
-        </div>
-        <div className='filler'/>
-        <div className='planet-slot-container'>
-          {this.props.planet.slots.map((item, i) =>
-            <div key={i}>
-              <ItemSlotComponent
-                id={i}
-                item={item}
-                addItem={this.props.addItem.bind(this)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrag={this.onDrag.bind(this)}
-                onDrop={this.onDrop.bind(this)}
-                onClick={this.onClick.bind(this)}
-                backgroundColor={'grey'} />
-            </div>
-          )}
-        </div>
+          <div style={{ position: 'absolute', zIndex: '-1000' }}>
+            <canvas id='canvas' width={window.innerWidth} height={window.innerHeight} style={{ border: '1pxsolid #000000' }} />
+          </div>
+          <div className='filler' />
+          <div className='planet-slot-container'>
+            {this.props.planet.slots.map((item, i) =>
+              <div key={i}>
+                <ItemSlotComponent
+                  id={i}
+                  item={item}
+                  addItem={this.props.addItem.bind(this)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrag={this.onDrag.bind(this)}
+                  onDrop={this.onDrop.bind(this)}
+                  onClick={this.onClick.bind(this)}
+                  backgroundColor={'grey'} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

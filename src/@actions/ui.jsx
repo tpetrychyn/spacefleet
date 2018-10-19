@@ -1,3 +1,12 @@
+export const setGamestate = (gamestate) => dispatch => {
+  dispatch({
+    type: 'SET_GAME_STATE',
+    payload: {
+      gamestate
+    }
+  })
+}
+
 export const openInventory = () => dispatch => {
   dispatch({
     type: 'UI_OPEN_INVENTORY',
