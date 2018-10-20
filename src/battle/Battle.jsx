@@ -1,7 +1,10 @@
 import React from 'react'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
 
 import { setGamestate } from '../@actions/ui'
+
+import Healthbar from './Healthbar'
 
 import style from './style.css'
 
@@ -15,12 +18,16 @@ class Battle extends React.Component {
       log: [],
       enemy: {
         name: 'Yasser',
+        maxShields: 20,
         shields: 20,
+        maxHealth: 100,
         health: 100
       },
       player: {
         name: 'Taylor',
+        maxShields: 20,
         shields: 20,
+        maxHealth: 100,
         health: 100
       }
     }
@@ -40,19 +47,19 @@ class Battle extends React.Component {
     }))
 
     if (this.state.enemy.shields > 0) {
-      this.setState({
+      this.setState(prev => ({
         enemy: {
-          ...this.state.enemy,
-          shields: this.state.enemy.shields - 10
+          ...prev.enemy,
+          shields: prev.enemy.shields - 10
         }
-      })
+      }))
     } else {
-      this.setState({
+      this.setState(prev => ({
         enemy: {
-          ...this.state.enemy,
-          shields: this.state.enemy.health - 10
+          ...prev.enemy,
+          health: prev.enemy.health - 10
         }
-      })
+      }))
     }
   }
 
@@ -62,8 +69,7 @@ class Battle extends React.Component {
         attacker: 'Enemy',
         target: 'You',
         damage: '10'
-      }, ...prev.log]
-      ,
+      }, ...prev.log],
       player: {
         ...prev.player,
         health: prev.player.health - 10
@@ -85,7 +91,7 @@ class Battle extends React.Component {
             <div className='col-8'>
               <div className='row'>
                 <div className='col-12'>
-                  <HealthBar health={this.state.enemy.health} name={this.state.enemy.name} shields={this.state.enemy.shields} />
+                  <Healthbar subject={this.state.enemy} />
                   <div className='float-right'>
                     <img src={ship1} height={100} />
                     <div className='clearfix' />
@@ -98,7 +104,7 @@ class Battle extends React.Component {
                 <div className='col-12'>
                   <img src={ship2} height={100} />
                   <div className='mt-2' />
-                  <HealthBar health={this.state.player.health} name={this.state.player.name} shields={this.state.player.shields} />
+                  <Healthbar subject={this.state.player} />
                   <div className='mt-2' />
                   <Abilities
                     ability1={this.ability1.bind(this)}
@@ -118,16 +124,6 @@ class Battle extends React.Component {
     )
   }
 }
-
-const HealthBar = (props) => (
-  <div style={{ width: '100%', position: 'relative', textAlign: 'center' }}>
-    <div style={{ backgroundColor: '#f43d3d', width: '100%', position: 'relative' }} >
-      <h4 style={{position: 'relative', zIndex: 1}}>{props.name}'s Health</h4>
-      <div style={{ backgroundColor: 'lightblue', position: 'absolute', top: 0, left: (100 - props.shields) + '%', width: props.shields + '%', height: '100%' }} />
-      <div style={{ backgroundColor: 'lightgreen', position: 'absolute', top: 0, left: 0, width: props.health - props.shields + '%', height: '100%' }} />
-    </div>
-  </div>
-)
 
 class Abilities extends React.Component {
   render () {

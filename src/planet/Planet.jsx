@@ -7,6 +7,8 @@ import ItemSlotComponent from '../inventory/ItemSlotComponent'
 
 import './Planet.css'
 
+// TODO: https://stackoverflow.com/questions/16919601/html5-canvas-camera-viewport-how-to-actally-do-it
+
 class Planet extends React.Component {
   constructor () {
     super()
@@ -20,11 +22,16 @@ class Planet extends React.Component {
       window: {
         width: 0,
         height: 0
-      }
+      },
+      x: 0,
+      y: 0,
+      scale: 1,
+      currentScale: 1
     }
   }
 
   componentDidMount () {
+    document.addEventListener('wheel', this.handleScroll.bind(this))
     this.sun.src = 'https://mdn.mozillademos.org/files/1456/Canvas_sun.png'
     this.moon.src = 'https://mdn.mozillademos.org/files/1443/Canvas_moon.png'
     this.earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png'
@@ -32,44 +39,55 @@ class Planet extends React.Component {
     this.loop()
   }
 
+  handleScroll (e) {
+    this.setState(prev => ({
+      x: e.clientX,
+      y: e.clientY,
+      scale: prev.scale -= 0.001 * e.deltaY
+    }))
+  }
+
+  clearCanvas (ctx) {
+    ctx.save()
+    ctx.globalCompositeOperation = 'copy'
+    ctx.strokeStyle = 'transparent'
+    ctx.beginPath()
+    ctx.lineTo(0, 0)
+    ctx.stroke()
+    ctx.restore()
+  }
+
   loop () {
+    const scale = this.state.scale
     const ctx = this.ctx
     const width = window.innerWidth
     const height = window.innerHeight
     const ships = this.props.planet.slots
+    const radius = width > height ? height / 2 : width / 2
 
-    const time = new Date()
     this.currentTime = (new Date()).getTime()
     const dt = (this.currentTime - this.lastTime) / 1000
-    ctx.globalCompositeOperation = 'destination-over'
-    ctx.clearRect(0, 0, width, height) // clear canvas
 
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'
-    ctx.strokeStyle = 'rgba(0, 153, 255, 0.4)'
+    this.clearCanvas(ctx)
+
+    if (this.state.scale !== 1) {
+      const x = this.state.x
+      const y = this.state.y
+      ctx.translate(x, y)
+      ctx.scale(scale, scale)
+      ctx.translate(-x, -y)
+      this.setState({ scale: 1, x: width / 2, y: height / 2 })
+    }
 
     for (const [index, ship] of ships.entries()) {
       if (!ship) continue
       ctx.save()
-      ctx.translate(width / 2, height + height / 2)
+      ctx.translate(width / 2, height / 2)
       ctx.rotate(Math.PI / 180 * (dt - index * 500) * index * 100 / 2)
-      ctx.translate(width / 2 + (50 * index), 0)
+      ctx.translate(radius + (50 * index), 0)
       ctx.drawImage(this.earth, -12, -12)
       ctx.restore()
     }
-
-    ctx.save()
-    ctx.rotate(((2 * Math.PI) / 60) * time.getSeconds() + ((2 * Math.PI) / 60000) * time.getMilliseconds())
-    ctx.translate(height + 50, 0)
-    ctx.drawImage(this.earth, -12, -12)
-    ctx.restore()
-    // Moon
-    ctx.save()
-    ctx.rotate(((2 * Math.PI) / 6) * time.getSeconds() + ((2 * Math.PI) / 6000) * time.getMilliseconds())
-    ctx.translate(300, 100)
-    ctx.drawImage(this.moon, -3.5, -3.5)
-    ctx.restore()
-
-    ctx.restore()
 
     const grd = ctx.createRadialGradient(66.000, 108.000, 0.000, 165.000, 132.900, 150.000)
     // Add colors
@@ -78,9 +96,17 @@ class Planet extends React.Component {
     grd.addColorStop(0.987, 'rgba(233, 127, 255, 1.000)')
     ctx.beginPath()
     ctx.fillStyle = grd
-    ctx.arc(width / 2, height + height / 2, width / 2, 0, Math.PI * 2, false) // Earth orbit
+    ctx.arc(width / 2, height / 2, radius - radius * 0.1, 0, Math.PI * 2, false) // Large planet
     ctx.fill()
-    ctx.stroke()
+
+    ctx.save()
+    ctx.beginPath()
+    ctx.fillStyle = 'grey'
+    ctx.translate(radius, 0)
+    ctx.arc(-500, -500, radius * 0.5, 0, Math.PI * 2, false) // Large planet
+    ctx.fill()
+
+    ctx.restore()
 
     window.requestAnimationFrame(this.loop.bind(this))
   }
@@ -127,9 +153,9 @@ class Planet extends React.Component {
         <div className='col-12'>
           <h3>Explore Planet</h3>
         </div>
-        <div className='col-12 text-center'>
-          <div style={{ position: 'absolute', zIndex: '-1000' }}>
-            <canvas id='canvas' width={window.innerWidth} height={window.innerHeight} style={{ border: '1pxsolid #000000' }} />
+        <div className='col-12 text-center' onScroll={this.handleScroll}>
+          <div style={{ position: 'absolute', zIndex: '-1000', top: 0, left: 0 }}>
+            <canvas id='canvas' width={window.innerWidth} height={window.innerHeight} />
           </div>
           <div className='filler' />
           <div className='planet-slot-container'>
