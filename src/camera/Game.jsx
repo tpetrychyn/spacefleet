@@ -91,11 +91,11 @@ class Game extends React.Component {
           if (o.isIntersect({ x, y })) {
             this.selected = o
             o.onClick()
-            this.forceUpdate()
-            return
+            break
           }
         }
       }
+      this.forceUpdate()
     }, false)
 
     canvas.addEventListener('mousedown', (e) => this.camera.startPan(e, canvas))
@@ -155,6 +155,16 @@ class Game extends React.Component {
       context.drawImage(this.earth, -12, -12, this.earth.width * this.camera.scale, this.earth.height * this.camera.scale)
       context.restore()
     }
+
+    for (let [i, o] of this.objects.entries()) {
+      if (i % 3 === 0) continue
+      context.save()
+      context.translate(o.x, o.y)
+      context.rotate(-Math.PI / 180 * dt * 100 / 2 * (1 + i / 10))
+      context.translate((o.radius + (50 * (2 + i / 2))) * this.camera.scale, 0)
+      context.drawImage(this.earth, -12, -12, this.earth.width * this.camera.scale, this.earth.height * this.camera.scale)
+      context.restore()
+    }
   }
 
   // Game Loop
@@ -163,7 +173,7 @@ class Game extends React.Component {
     this.draw()
   }
 
-  searchPlanet() {
+  searchPlanet () {
     const gem = new SupportGem('Space Dust')
     gem.isStackable = true
     this.props.addItem(gem, null, 10)
@@ -174,11 +184,11 @@ class Game extends React.Component {
   render () {
     return (
       <div>
-        {this.selected ? 
-        <div style={{ position: 'absolute', top: this.selected.y, left: this.selected.x - 25, zIndex: 1000, height: '50px', width: '50px', display: 'block' }}>
-          <button onClick={this.searchPlanet.bind(this)} className='btn btn-sm btn-danger'>Search planet</button>
-        </div>
-        :''}
+        {this.selected
+          ? <div style={{ position: 'absolute', top: this.selected.y, left: this.selected.x - 25, zIndex: 1000, height: '50px', width: '50px', display: 'block' }}>
+            <button onClick={this.searchPlanet.bind(this)} className='btn btn-sm btn-danger'>Search planet</button>
+          </div>
+          : ''}
         <div style={{ zIndex: '-1000', top: 0, left: 0, width: window.innerWidth, height: window.innerHeight }}>
           <canvas id='canvas' width={window.innerWidth} height={window.innerHeight} />
         </div>

@@ -5,7 +5,7 @@ import Workbench from './inventory/workbench/Workbench'
 import ItemComponent from './inventory/ItemComponent'
 import Battle from './battle/Battle'
 
-import Game from './camera/camera'
+import Game from './camera/Game'
 
 import { setGamestate } from './@actions/ui'
 
