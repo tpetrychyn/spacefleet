@@ -14,6 +14,7 @@ export default (state = {
         found = action.payload.slot || state.slots.findIndex(s => !s) // appropriate slot
         slotsCopy[found] = item
       }
+      
       return {
         ...state,
         slots: slotsCopy

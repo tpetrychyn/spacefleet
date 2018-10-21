@@ -1,10 +1,11 @@
 import React from 'react'
 
 import Inventory from './inventory/inventory/Inventory'
-import Planet from './planet/Planet'
 import Workbench from './inventory/workbench/Workbench'
 import ItemComponent from './inventory/ItemComponent'
 import Battle from './battle/Battle'
+
+import Game from './camera/camera'
 
 import { setGamestate } from './@actions/ui'
 
@@ -20,8 +21,8 @@ class GameScreen extends React.Component {
       <div className='row' onMouseMove={(e) => this.didMove(e)}>
         <CCarrying x={this.state.x} y={this.state.y}/>
         {this.props.ui.gamestate === 'planet' ? 
-          <div className='col-12' style={{ position: 'absolute' }}>
-            <Planet />
+          <div style={{ position: 'relative' }}>
+            <Game />
           </div> : ''
         }
         {this.props.ui.gamestate === 'battle' ? <div className='col-8 offset-2' style={{marginTop:'15px'}}>

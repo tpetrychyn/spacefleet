@@ -2,6 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 class ItemComponent extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      amount: 0,
+      shiny: false
+    }
+  }
+
   onDrop (e) {
     e.stopPropagation()
     this.props.onDrop(e, this.props.item)

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { beginDrag, endDrag } from '../../@actions/dragging'
 import { addItem, removeItem } from '../../@actions/inventory'
-import { openInventory, closeInventory, openWorkbench } from '../../@actions/ui'
+import { openInventory, closeInventory, setInventoryHover, openWorkbench } from '../../@actions/ui'
 
 import SupportGem from '../../shared/entities/SupportGem'
 
@@ -84,12 +84,18 @@ class InventoryComponent extends React.Component {
   }
 
   closeInventory () {
+    if (this.props.ui.hoverOverInventory) {
+      this.props.setInventoryHover(false)
+    }
     if (!this.props.ui.workbenchIsOpen) {
       this.props.closeInventory()
     }
   }
 
   openInventory () {
+    if (!this.props.ui.hoverOverInventory) {
+      this.props.setInventoryHover(true)
+    }
     if (!this.props.ui.inventoryIsOpen) {
       this.props.openInventory()
     }
@@ -146,6 +152,7 @@ const mapDispatchToProps = dispatch => ({
   endDrag: () => dispatch(endDrag()),
   openInventory: () => dispatch(openInventory()),
   closeInventory: () => dispatch(closeInventory()),
+  setInventoryHover: (hover) => dispatch(setInventoryHover(hover)),
   openWorkbench: () => dispatch(openWorkbench())
 })
 
