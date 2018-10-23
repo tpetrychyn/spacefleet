@@ -1,7 +1,8 @@
 import Rectangle from './Rectangle'
 
 export default class Camera {
-  constructor (xView, yView, canvasWidth, canvasHeight, worldWidth, worldHeight) {
+  constructor (xView, yView, canvasWidth, canvasHeight, worldWidth, worldHeight, react) {
+    this.react = react
     // position of camera (left-top coordinate)
     this.xView = xView || 0
     this.yView = yView || 0
@@ -69,6 +70,7 @@ export default class Camera {
     var offsetY = (e.clientY - this.pan.start.y) / this.scale
     this.xView = this.global.offset.x - offsetX
     this.yView = this.global.offset.y - offsetY
+    this.react.forceUpdate()
   }
 
   update () {

@@ -7,9 +7,9 @@ export const setGamestate = (gamestate) => dispatch => {
   })
 }
 
-export const setInventoryHover = (hover) => dispatch => {
+export const setHover = (hover) => dispatch => {
   dispatch({
-    type: 'UI_SET_INVENTORY_HOVER',
+    type: 'UI_SET_HOVER',
     payload: { hover }
   })
 }

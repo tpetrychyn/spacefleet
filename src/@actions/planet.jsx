@@ -1,20 +1,18 @@
-export const addItem = (item, slot, amount = 1) => dispatch => {
+export const placeObject = (object, point) => dispatch => {
   dispatch({
-    type: 'PLANET_ADD_ITEM',
+    type: 'PLANET_PLACE_OBJECT',
     payload: {
-      item,
-      slot,
-      amount
+      object,
+      point
     }
   })
 }
 
-export const removeItem = (item, amount = item.amount) => dispatch => {
+export const removeObject = (object) => dispatch => {
   dispatch({
-    type: 'PLANET_REMOVE_ITEM',
+    type: 'PLANET_REMOVE_OBJECT',
     payload: {
-      item,
-      amount
+      object
     }
   })
 }

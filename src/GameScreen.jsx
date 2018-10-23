@@ -5,11 +5,14 @@ import Workbench from './inventory/workbench/Workbench'
 import ItemComponent from './inventory/ItemComponent'
 import Battle from './battle/Battle'
 
+import Planet from './planet/Planet'
 import Game from './camera/Game'
 
 import { setGamestate } from './@actions/ui'
 
 import { connect } from 'react-redux'
+
+import portalImg from './planet/portal_SE.png'
 
 class GameScreen extends React.Component {
   state = {x: 0, y: 0}
@@ -18,12 +21,15 @@ class GameScreen extends React.Component {
   }
   render () {
     return (
-      <div className='row' onMouseMove={(e) => this.didMove(e)}>
+      <div onMouseMove={(e) => this.didMove(e)}>
         <CCarrying x={this.state.x} y={this.state.y}/>
-        {this.props.ui.gamestate === 'planet' ? 
+        {this.props.ui.gamestate === 'space' ? 
           <div style={{ position: 'relative' }}>
             <Game />
           </div> : ''
+        }
+        {this.props.ui.gamestate === 'planet' ?
+          <Planet /> : ''
         }
         {this.props.ui.gamestate === 'battle' ? <div className='col-8 offset-2' style={{marginTop:'15px'}}>
           <Battle />
@@ -34,8 +40,9 @@ class GameScreen extends React.Component {
         <div style={{ zIndex: 1000 }}>
           <Workbench />
         </div>
-        <div style={{position: 'absolute', right: '50px', width: '80px'}}>
+        <div style={{position: 'absolute', top: '50px', right: '50px', width: '80px'}}>
           <button className='btn btn-small' onClick={() => this.props.setGamestate('battle')}>Open Battle</button>
+          <button className='btn btn-small' onClick={() => this.props.setGamestate('space')}>Open Space</button>
           <button className='btn btn-small' onClick={() => this.props.setGamestate('planet')}>Open Planet</button>
         </div>
       </div>
@@ -55,12 +62,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(GameScreen)
 
 class Carrying extends React.Component {
   render() {
+    if (!this.props.dragging.dragItem) return ''
     return (
       <div style={{ position: 'absolute', top: this.props.y - 50, left: this.props.x - 45, zIndex: 1001, pointerEvents: 'none' }}>
+      {this.props.ui.hoverOver === 'inventory' ?
         <ItemComponent
           onDrag={() => { }}
           onDrop={() => { }}
-          item={this.props.dragging.dragItem} />
+          item={this.props.dragging.dragItem} /> : ''
+      }
+      {this.props.ui.hoverOver === 'planet' ?
+          <img src={portalImg} width={'100px'} height={'110px'}/> : ''
+      }
       </div>
     )
   }

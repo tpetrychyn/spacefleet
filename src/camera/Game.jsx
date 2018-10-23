@@ -2,9 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { addItem } from '../@actions/inventory'
-import { closeInventory, openInventory } from '../@actions/ui'
-
-import SupportGem from '../shared/entities/SupportGem'
+import { closeInventory, openInventory, setGamestate } from '../@actions/ui'
 
 import Circle from './Circle'
 import Camera from './Camera'
@@ -66,7 +64,7 @@ class Game extends React.Component {
       height: 3000
     }
 
-    this.camera = new Camera(0, 0, canvas.width, canvas.height, this.room.width, this.room.height)
+    this.camera = new Camera(0, 0, canvas.width, canvas.height, this.room.width, this.room.height, this)
     this.earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png'
 
     this.objects = generate(this.camera)
@@ -91,11 +89,11 @@ class Game extends React.Component {
           if (o.isIntersect({ x, y })) {
             this.selected = o
             o.onClick()
+            this.forceUpdate()
             break
           }
         }
       }
-      this.forceUpdate()
     }, false)
 
     canvas.addEventListener('mousedown', (e) => this.camera.startPan(e, canvas))
@@ -173,20 +171,16 @@ class Game extends React.Component {
     this.draw()
   }
 
-  searchPlanet () {
-    const gem = new SupportGem('Space Dust')
-    gem.isStackable = true
-    this.props.addItem(gem, null, 10)
-    this.props.openInventory()
-    setTimeout(this.props.closeInventory, 2000)
+  explorePlanet () {
+    this.props.setGamestate('planet')
   }
 
   render () {
     return (
       <div>
         {this.selected
-          ? <div style={{ position: 'absolute', top: this.selected.y, left: this.selected.x - 25, zIndex: 1000, height: '50px', width: '50px', display: 'block' }}>
-            <button onClick={this.searchPlanet.bind(this)} className='btn btn-sm btn-danger'>Search planet</button>
+          ? <div style={{ position: 'absolute', top: this.selected.y - 10, left: this.selected.x - 35, zIndex: 1000, height: '50px', width: '50px', display: 'block' }}>
+            <button onClick={this.explorePlanet.bind(this)} className='btn btn-md btn-danger'>Explore</button>
           </div>
           : ''}
         <div style={{ zIndex: '-1000', top: 0, left: 0, width: window.innerWidth, height: window.innerHeight }}>
@@ -205,7 +199,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addItem: (item, slot, amount) => dispatch(addItem(item, slot, amount)),
   openInventory: () => dispatch(openInventory()),
-  closeInventory: () => dispatch(closeInventory())
+  closeInventory: () => dispatch(closeInventory()),
+  setGamestate: (gamestate) => dispatch(setGamestate(gamestate))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game)

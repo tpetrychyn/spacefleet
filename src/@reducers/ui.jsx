@@ -1,8 +1,8 @@
 
 export default (state = {
   inventoryIsOpen: false,
-  hoverOverInventory: false,
   workbenchIsOpen: false,
+  hoverOver: null,
   gamestate: 'planet'
 }, action) => {
   switch (action.type) {
@@ -12,10 +12,10 @@ export default (state = {
         gamestate: action.payload.gamestate
       }
 
-    case 'UI_SET_INVENTORY_HOVER':
+    case 'UI_SET_HOVER':
       return {
         ...state,
-        hoverOverInventory: action.payload.hover
+        hoverOver: action.payload.hover
       }
     case 'UI_OPEN_INVENTORY':
       return {
