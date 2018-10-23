@@ -3,10 +3,10 @@ import React from 'react'
 import Inventory from './inventory/inventory/Inventory'
 import Workbench from './inventory/workbench/Workbench'
 import ItemComponent from './inventory/ItemComponent'
-import Battle from './battle/Battle'
 
+import Battle from './battle/Battle'
 import Planet from './planet/Planet'
-import Game from './camera/Game'
+import Space from './space/Space'
 
 import { setGamestate } from './@actions/ui'
 
@@ -25,7 +25,7 @@ class GameScreen extends React.Component {
         <CCarrying x={this.state.x} y={this.state.y}/>
         {this.props.ui.gamestate === 'space' ? 
           <div style={{ position: 'relative' }}>
-            <Game />
+            <Space />
           </div> : ''
         }
         {this.props.ui.gamestate === 'planet' ?

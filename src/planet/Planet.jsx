@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { placeObject } from '../@actions/planet'
+import { placeObject, removeObject, setObjects } from '../@actions/planet'
 import { endDrag } from '../@actions/dragging'
 import { setHover } from '../@actions/ui'
 import { Carousel } from 'react-responsive-carousel'
@@ -14,6 +14,8 @@ import craftImg from './spaceCraft4_SE.png'
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import './Planet.css'
+
+import socket from '../SocketService'
 
 const PlanetContainer = styled.div`
   display: flex;
@@ -32,6 +34,7 @@ const PlanetObject = styled.img`
   top: ${props => (props.top - 50) / window.innerHeight * 100 + '%'};
   left: ${props => (props.left - 45) / window.innerWidth * 100 + '%'};
   height: 110px;
+  z-index: 1000;
   width: 100px !important;
 `
 
@@ -46,13 +49,21 @@ const itemToImage = (item) => {
 }
 
 class Planet extends React.Component {
+  componentDidMount () {
+    // console.log(socket)
+    socket.on('planet', data => {
+      console.log(data)
+      this.props.setObjects(data.objects)
+      // console.log(data)
+    })
+  }
   onHover () {
     if (this.props.ui.hoverOver !== 'planet') {
       this.props.setHover('planet')
     }
   }
 
-  onClick (e) {
+  onDrop (e) {
     const item = this.props.dragging.dragItem
     if (!item) return
 
@@ -68,7 +79,7 @@ class Planet extends React.Component {
         <Carousel showThumbs={false} showIndicators={false} showStatus={false} transitionTime={1000}>
           <PlanetContainer
             onMouseOver={this.onHover.bind(this)}
-            onClick={e => this.onClick(e)}>
+            onClick={e => this.onDrop(e)}>
             <Ground color={'lightgreen'}>
               {this.props.planet.objects.map((o, i) =>
                 <PlanetObject key={i} src={itemToImage(o.object)} left={o.point.x} top={o.point.y} />
@@ -86,6 +97,8 @@ class Planet extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   placeObject: (object, point) => dispatch(placeObject(object, point)),
+  removeObject: (object) => dispatch(removeObject(object)),
+  setObjects: (objects) => dispatch(setObjects(objects)),
   endDrag: () => dispatch(endDrag()),
   setHover: (hover) => dispatch(setHover(hover))
 })
