@@ -1,7 +1,7 @@
 export default (state = {
   objects: []
 }, action) => {
-  const objectsCopy = state.objects.slice()
+  let objectsCopy = state.objects.slice()
   switch (action.type) {
     case 'PLANET_SET_OBJECTS':
       const { objects } = action.payload
@@ -19,8 +19,8 @@ export default (state = {
     }
 
     case 'PLANET_REMOVE_OBJECT': {
-      const { object, point } = action.payload
-      objectsCopy.filter(o => o === object)
+      const { object } = action.payload
+      objectsCopy = objectsCopy.filter(o => o !== object)
       return {
         ...state,
         objects: objectsCopy

@@ -29,7 +29,7 @@ const Ground = styled.div`
   width: 100%;
 `
 
-const PlanetObject = styled.img`
+const PlanetObject = styled.div`
   position: absolute;
   top: ${props => (props.top - 50) / window.innerHeight * 100 + '%'};
   left: ${props => (props.left - 45) / window.innerWidth * 100 + '%'};
@@ -73,6 +73,10 @@ class Planet extends React.Component {
     this.props.endDrag()
   }
 
+  deleteItem (object) {
+    this.props.removeObject(object)
+  }
+
   render () {
     return (
       <div>
@@ -82,7 +86,9 @@ class Planet extends React.Component {
             onClick={e => this.onDrop(e)}>
             <Ground color={'lightgreen'}>
               {this.props.planet.objects.map((o, i) =>
-                <PlanetObject key={i} src={itemToImage(o.object)} left={o.point.x} top={o.point.y} />
+                <PlanetObject key={i} onClick={e => this.deleteItem(o)} left={o.point.x} top={o.point.y}>
+                  <img src={itemToImage(o.object)} />
+                </PlanetObject>
               )}
             </Ground>
           </PlanetContainer>
