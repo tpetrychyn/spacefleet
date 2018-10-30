@@ -6,7 +6,7 @@ import ItemComponent from './inventory/ItemComponent'
 
 import Battle from './battle/Battle'
 import Planet from './planet/Planet'
-import Space from './space/Space'
+import Space from './space2/Space'
 
 import { setGamestate } from './@actions/ui'
 

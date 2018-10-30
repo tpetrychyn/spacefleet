@@ -3,7 +3,7 @@ export default (state = {
   inventoryIsOpen: false,
   workbenchIsOpen: false,
   hoverOver: null,
-  gamestate: 'planet'
+  gamestate: 'space'
 }, action) => {
   switch (action.type) {
     case 'SET_GAME_STATE':

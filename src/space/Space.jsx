@@ -1,4 +1,6 @@
 import React from 'react'
+// https://trianglify.io/
+// http://uigoodies.com/patterns.html
 import { connect } from 'react-redux'
 
 import { addItem } from '../@actions/inventory'
@@ -64,12 +66,13 @@ class Game extends React.Component {
       height: 3000
     }
 
-    this.camera = new Camera(0, 0, canvas.width, canvas.height, this.room.width, this.room.height, this)
+    this.camera = new Camera(400, 400, canvas.width, canvas.height, this.room.width, this.room.height, this)
     this.earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png'
 
-    this.objects = generate(this.camera)
+    // this.objects = //generate(this.camera)
+    this.objects = [new Circle(this.camera, 1000, 370, 300, 'blue')]
 
-    this.camera.centerOn(this.objects[0])
+    // this.camera.centerOn(this.objects[0])
 
     var flag = 0
     let movement = 0
@@ -110,7 +113,7 @@ class Game extends React.Component {
     this.x = e.clientX
     this.y = e.clientY
 
-    this.camera.setScale(this.camera.scale - (0.001 * e.deltaY))
+    this.camera.setScale(this.camera.scale - (0.001 * e.deltaY) * this.camera.scale)
     this.forceUpdate()
   }
 

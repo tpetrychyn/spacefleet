@@ -15,7 +15,7 @@ import craftImg from './spaceCraft4_SE.png'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import './Planet.css'
 
-import socket from '../SocketService'
+// import socket from '../SocketService'
 
 const PlanetContainer = styled.div`
   display: flex;
@@ -49,14 +49,6 @@ const itemToImage = (item) => {
 }
 
 class Planet extends React.Component {
-  componentDidMount () {
-    // console.log(socket)
-    socket.on('planet', data => {
-      console.log(data)
-      this.props.setObjects(data.objects)
-      // console.log(data)
-    })
-  }
   onHover () {
     if (this.props.ui.hoverOver !== 'planet') {
       this.props.setHover('planet')

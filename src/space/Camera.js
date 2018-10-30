@@ -11,6 +11,9 @@ export default class Camera {
     this.wView = canvasWidth
     this.hView = canvasHeight
 
+    this.width = this.wView
+    this.height = this.hView
+
     this.scale = 1
 
     // rectangle that represents the viewport
@@ -32,15 +35,36 @@ export default class Camera {
         y: null
       }
     }
+    this.origX = this.xView
+    this.origY = this.yView
   }
 
+  /*  // this converts x and y to window position
+  get x () {
+    return (this._x - this.camera.xView) * this.camera.scale */
+
   centerOn (object) {
+    console.log(this.xView, this.yView)
     this.set(object._x - window.innerWidth / 2 / this.scale, object._y - window.innerHeight / 2 / this.scale)
   }
 
   setScale (scale) {
     if (scale >= 0.1 && scale <= 10) {
+      const change = this.scale - scale
+      const perChange = change / this.scale
       this.scale = scale
+
+      const x = window.innerWidth / 2
+      const y = window.innerHeight / 2
+
+      const xWorld = (x - this.xView) / this.scale
+      const yWorld = (y - this.yView) / this.scale
+
+      // console.log(xWorld, yWorld)
+      console.log(change, perChange)
+      console.log(this.xView - this.xView * perChange)
+      console.log(this.origY)
+      this.set(this.xView - this.origX * perChange, this.yView - this.origY * perChange)
     }
   }
 
