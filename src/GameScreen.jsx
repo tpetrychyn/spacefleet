@@ -8,6 +8,8 @@ import Battle from './battle/Battle'
 import Planet from './planet/Planet'
 import Space from './space2/Space'
 
+import Auction from './auction/Auction'
+
 import { setGamestate } from './@actions/ui'
 
 import { connect } from 'react-redux'
@@ -31,6 +33,9 @@ class GameScreen extends React.Component {
         {this.props.ui.gamestate === 'planet' ?
           <Planet /> : ''
         }
+        {this.props.ui.gamestate === 'auction' ?
+          <Auction /> : ''
+        }
         {this.props.ui.gamestate === 'battle' ? <div className='col-8 offset-2' style={{marginTop:'15px'}}>
           <Battle />
         </div> : ''}
@@ -44,6 +49,7 @@ class GameScreen extends React.Component {
           <button className='btn btn-small' onClick={() => this.props.setGamestate('battle')}>Open Battle</button>
           <button className='btn btn-small' onClick={() => this.props.setGamestate('space')}>Open Space</button>
           <button className='btn btn-small' onClick={() => this.props.setGamestate('planet')}>Open Planet</button>
+          <button className='btn btn-small' onClick={() => this.props.setGamestate('auction')}>Open Auction</button>
         </div>
       </div>
     )
