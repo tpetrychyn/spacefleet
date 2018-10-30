@@ -78,7 +78,7 @@ class Carrying extends React.Component {
           item={this.props.dragging.dragItem} /> : ''
       }
       {this.props.ui.hoverOver === 'planet' ?
-          <img src={portalImg} width={'100px'} height={'110px'}/> : ''
+          <img src={portalImg} width={'100px'} height={'110px'} alt='Object'/> : ''
       }
       </div>
     )

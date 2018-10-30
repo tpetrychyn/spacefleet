@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
 import { Row, Col, Input, FormGroup, InputGroup, InputGroupAddon, Label, Button } from 'reactstrap'
@@ -25,7 +25,7 @@ const ItemPicture = styled.div`
 `
 
 const ItemList = styled.div`
-  max-height: calc(100% - 180px);
+  max-height: calc(85vh - 180px);
   overflow-y: auto;
   overflow-x: hidden;
 `
@@ -63,7 +63,7 @@ const Footer = styled.div`
 `
 
 const ItemRowContainer = (props) => (
-  <Col>
+  <Col onClick={props.onClick}>
     <ItemRow>
       <ItemPicture color={props.color} />
       <ItemLeft>
@@ -78,49 +78,67 @@ const ItemRowContainer = (props) => (
   </Col>
 )
 
-class Auction extends React.Component {
-  constructor () {
-    super()
-    this.state = {
-      results: Array(30).fill(null, 0)
-    }
-  }
-  render () {
-    return (
-      <AuctionWindow>
-        <Header>
-          <h2>Auction House <span className='small float-right'>Operated by Shockz13</span></h2>
-        </Header>
+const ConfirmWindowDiv = styled.div`
+  position: absolute;
+  top: calc(50% - 100px);
+  left: calc(50% - 200px);
+  width: 400px;
+  height: 200px;
+  background-color: rgba(255,255,255,0.9);
+  z-index: 1000;
+`
 
-        <Row>
-          <Col xs={6}>
-            <FormGroup>
-              <Label for='searchBox'>Item Name</Label>
-              <InputGroup>
-                <Input type='text' name='text' id='searchBox' placeholder='Enter Item Name' />
-                <InputGroupAddon addonType='append'><Button color='primary'>Search</Button></InputGroupAddon>
-              </InputGroup>
-            </FormGroup>
+const ConfirmWindow = (props) => (
+  props.show ? <ConfirmWindowDiv>
+    <h2>Confirm Purchase</h2>
+    <h3>Space Dust <span className='small'>x5</span></h3>
 
-          </Col>
-        </Row>
+    <Button color='primary'>Confirm</Button>
+    <Button color='link' onClick={props.onHide}>Cancel</Button>
+  </ConfirmWindowDiv> : ''
 
-        <ItemList>
-          {this.state.results.map((k, i) => (
-            <Row style={{marginTop: i !== 0 ? '15px' : ''}}>
-              <ItemRowContainer color='lightblue' />
+)
 
-              <ItemRowContainer color='pink' />
-            </Row>
-          ))}
-        </ItemList>
+function Auction () {
+  const [results] = useState(Array(30).fill(null, 0))
+  const [isConfirming, setIsConfirming] = useState(false)
+  return (
+    <AuctionWindow>
+      <Header>
+        <h2>Auction House <span className='small float-right'>Operated by Shockz13</span></h2>
+      </Header>
 
-        <Footer>
-          <h2>Your gold: <span className='small'>1523g</span></h2>
-        </Footer>
-      </AuctionWindow>
-    )
-  }
+      <ConfirmWindow
+        show={isConfirming}
+        onHide={() => setIsConfirming(false)} />
+
+      <Row>
+        <Col xs={6}>
+          <FormGroup>
+            <Label for='searchBox'>Item Name</Label>
+            <InputGroup>
+              <Input type='text' name='text' id='searchBox' placeholder='Enter Item Name' />
+              <InputGroupAddon addonType='append'><Button color='primary'>Search</Button></InputGroupAddon>
+            </InputGroup>
+          </FormGroup>
+        </Col>
+      </Row>
+
+      <ItemList>
+        {results.map((k, i) => (
+          <Row key={i} style={{ marginTop: i !== 0 ? '15px' : '' }}>
+            <ItemRowContainer color='lightblue' onClick={() => setIsConfirming(true)} />
+
+            <ItemRowContainer color='pink' />
+          </Row>
+        ))}
+      </ItemList>
+
+      <Footer>
+        <h2>Your gold: <span className='small'>1523g</span></h2>
+      </Footer>
+    </AuctionWindow>
+  )
 }
 
 const mapStateToProps = state => ({

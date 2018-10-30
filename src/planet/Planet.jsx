@@ -31,11 +31,21 @@ const Ground = styled.div`
 
 const PlanetObject = styled.div`
   position: absolute;
-  top: ${props => (props.top - 50) / window.innerHeight * 100 + '%'};
-  left: ${props => (props.left - 45) / window.innerWidth * 100 + '%'};
+  top: ${props => (props.top - 50) / window.innerHeight * 100 + 'vh'};
+  left: ${props => (props.left - 45) / window.innerWidth * 100 + 'vw'};
   height: 110px;
-  z-index: 1000;
+  z-index: 998;
   width: 100px !important;
+`
+
+const StoragePanel = styled.div`
+  width: 200px;
+  height: 100px;
+  background-color: rgba(255,255,255,0.8);
+  position: absolute;
+  z-index: 999;
+  top: ${props => (props.top - 50) / window.innerHeight * 100 + 'vh'};
+  left: ${props => (props.left - 45) / window.innerWidth * 100 + 'vw'};
 `
 
 const itemToImage = (item) => {
@@ -49,6 +59,13 @@ const itemToImage = (item) => {
 }
 
 class Planet extends React.Component {
+  constructor () {
+    super()
+
+    this.state = {
+      selected: null
+    }
+  }
   onHover () {
     if (this.props.ui.hoverOver !== 'planet') {
       this.props.setHover('planet')
@@ -65,6 +82,11 @@ class Planet extends React.Component {
     this.props.endDrag()
   }
 
+  openStorage (selected) {
+    console.log(selected)
+    this.setState({ selected })
+  }
+
   deleteItem (object) {
     this.props.removeObject(object)
   }
@@ -76,10 +98,11 @@ class Planet extends React.Component {
           <PlanetContainer
             onMouseOver={this.onHover.bind(this)}
             onClick={e => this.onDrop(e)}>
+            {this.state.selected && <StoragePanel left={this.state.selected.point.x} top={this.state.selected.point.y} />}
             <Ground color={'lightgreen'}>
               {this.props.planet.objects.map((o, i) =>
-                <PlanetObject key={i} onClick={e => this.deleteItem(o)} left={o.point.x} top={o.point.y}>
-                  <img src={itemToImage(o.object)} />
+                <PlanetObject key={i} onClick={e => this.openStorage(o)} left={o.point.x} top={o.point.y}>
+                  <img src={itemToImage(o.object)} alt={o.name} />
                 </PlanetObject>
               )}
             </Ground>

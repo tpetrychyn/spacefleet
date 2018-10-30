@@ -5,8 +5,6 @@ import { setGamestate } from '../@actions/ui'
 
 import Healthbar from './Healthbar'
 
-import style from './style.css'
-
 import ship1 from './ship1.png'
 import ship2 from './ship2.png'
 
@@ -92,7 +90,7 @@ class Battle extends React.Component {
                 <div className='col-12'>
                   <Healthbar subject={this.state.enemy} />
                   <div className='float-right'>
-                    <img src={ship1} height={100} />
+                    <img src={ship1} height={100} alt='Ship' />
                     <div className='clearfix' />
                     <div style={{ width: '30px', height: '30px', backgroundColor: 'silver', float: 'left', margin: '2px' }} />
                     <div style={{ width: '30px', height: '30px', backgroundColor: 'silver', float: 'left', margin: '2px' }} />
@@ -101,7 +99,7 @@ class Battle extends React.Component {
                   </div>
                 </div>
                 <div className='col-12'>
-                  <img src={ship2} height={100} />
+                  <img src={ship2} height={100} alt='Ship' />
                   <div className='mt-2' />
                   <Healthbar subject={this.state.player} />
                   <div className='mt-2' />
