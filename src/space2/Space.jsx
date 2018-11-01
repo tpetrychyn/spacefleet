@@ -167,7 +167,7 @@ export default class Space extends React.Component {
   }
 
   componentWillUnmount () {
-    this.game.runDestroy()
+    this.state.game.runDestroy()
     window.removeEventListener('wheel', scrollListener)
   }
 

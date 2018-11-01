@@ -48,6 +48,16 @@ const StoragePanel = styled.div`
   left: ${props => (props.left - 45) / window.innerWidth * 100 + 'vw'};
 `
 
+const RockMound = styled.div`
+  width: 200px;
+  height: 150px;
+  background-color: rgba(200,200,200,0.6);
+  position: absolute;
+  z-index: 999;
+  top: ${props => (props.top - 50) / window.innerHeight * 100 + 'vh'};
+  left: ${props => (props.left - 45) / window.innerWidth * 100 + 'vw'};
+`
+
 const itemToImage = (item) => {
   if (item.name === 'Metal Scraps') {
     return portalImg
@@ -57,6 +67,15 @@ const itemToImage = (item) => {
     return craftImg
   }
 }
+
+const RockMoundContainer = (props) => (
+  <RockMound top={props.top} left={props.left}>
+    <h4>Rock Mound</h4>
+    <h5>Contains:</h5>
+    <p>5x Space Dust</p>
+    <button className='btn btn-primary'>Harvest</button>
+  </RockMound>
+)
 
 class Planet extends React.Component {
   constructor () {
@@ -105,6 +124,7 @@ class Planet extends React.Component {
                   <img src={itemToImage(o.object)} alt={o.name} />
                 </PlanetObject>
               )}
+              <RockMoundContainer top={400} left={600} />
             </Ground>
           </PlanetContainer>
           <PlanetContainer>
