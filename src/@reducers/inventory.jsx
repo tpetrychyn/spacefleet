@@ -5,7 +5,8 @@ export default (state = {
   let found
   switch (action.type) {
     case 'INVENTORY_ADD_ITEM':
-      let item = action.payload.item
+      let item = action.payload.item.clone()
+
       item.amount = action.payload.amount || 1
       let existingItem = state.slots.find(s => s && s.name === item.name)
       if (item.isStackable && existingItem) {
@@ -14,7 +15,7 @@ export default (state = {
         found = action.payload.slot || state.slots.findIndex(s => !s) // appropriate slot
         slotsCopy[found] = item
       }
-      
+
       return {
         ...state,
         slots: slotsCopy

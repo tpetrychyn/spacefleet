@@ -5,31 +5,13 @@ import { beginDrag, endDrag } from '../../@actions/dragging'
 import { addItem, removeItem } from '../../@actions/inventory'
 import { openInventory, closeInventory, setHover, openWorkbench } from '../../@actions/ui'
 
-import SupportGem from '../../shared/entities/SupportGem'
-
 import ItemSlotComponent from '../ItemSlotComponent'
-import Gem from '../../shared/entities/Gem'
 
 import './Inventory.css'
 import { ReactComponent as WorkbenchIcon } from './workbench.svg'
 import { Spring } from 'react-spring'
 
 class InventoryComponent extends React.Component {
-  componentDidMount () {
-    const gem = new SupportGem('Double Hit')
-    gem.isStackable = true
-    this.props.addItem(gem)
-    const gem2 = new SupportGem('Level +1')
-    gem2.backgroundColor = 'blue'
-    this.props.addItem(gem2)
-
-    const gem3 = new Gem()
-    gem3.name = 'Metal Scraps'
-    gem3.isStackable = true
-    gem3.amount = 5
-    this.props.addItem(gem3)
-  }
-
   onHover (item) {
     if (item) { this.setState({ hoverItem: item }) }
   }
@@ -59,28 +41,12 @@ class InventoryComponent extends React.Component {
     this.props.endDrag()
   }
 
-  onDrag (item, slot) {
-    this.props.beginDrag(item, slot, this)
-  }
-
   onClick (item, slot) {
     if (this.props.dragging.dragItem) {
       this.onDrop(item, slot)
     } else {
-      this.onDrag(item, slot)
+      this.props.beginDrag(item, slot, this)
     }
-  }
-
-  addItem () {
-    const gem = new SupportGem('Space Dust')
-    gem.isStackable = true
-    this.props.addItem(gem, null, 10)
-  }
-
-  addItem2 () {
-    const gem = new SupportGem('Double Hit')
-    gem.isStackable = true
-    this.props.addItem(gem, null, 6)
   }
 
   closeInventory () {
@@ -122,14 +88,10 @@ class InventoryComponent extends React.Component {
                     id={i}
                     item={item}
                     onDragOver={(e) => this.onDragOver(e)}
-                    onDrop={this.onDrop.bind(this)}
-                    onDrag={this.onDrag.bind(this)}
                     onClick={this.onClick.bind(this)}
                   />
                 </div>
               )}
-              <button className='btn btn-md btn-primary' onClick={this.addItem.bind(this)}>Add Item Button</button>
-              <button className='btn btn-md btn-primary' onClick={this.addItem2.bind(this)}>Add Item Button</button>
             </div>
           </div>}
       </Spring>

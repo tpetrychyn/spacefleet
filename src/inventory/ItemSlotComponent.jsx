@@ -5,16 +5,6 @@ import ItemComponent from './ItemComponent'
 import './item.css'
 
 class ItemSlotComponent extends React.Component {
-  onDrop (e, item) {
-    e.stopPropagation()
-    this.props.onDrop(item, this.props.id)
-  }
-
-  onDrag (e, item) {
-    e.stopPropagation()
-    this.props.onDrag(item, this.props.id)
-  }
-
   onClick (e, item) {
     e.stopPropagation()
     this.props.onClick(item, this.props.id)
@@ -25,13 +15,10 @@ class ItemSlotComponent extends React.Component {
       <div
         className='droppable slot float-left'
         onDragOver={this.props.onDragOver}
-        onDrop={(e) => this.onDrop(e)}
         onClick={(e) => this.onClick(e)}
         style={{ backgroundColor: this.props.backgroundColor || 'rgba(50, 50, 50, 0.1)' }}>
         <ItemComponent
           onClick={this.onClick.bind(this)}
-          onDrag={this.onDrag.bind(this)}
-          onDrop={this.onDrop.bind(this)}
           item={this.props.item} />
       </div>
     )

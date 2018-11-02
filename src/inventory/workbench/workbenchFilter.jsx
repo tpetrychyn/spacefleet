@@ -1,4 +1,5 @@
-import Equipable from '../../shared/entities/Equipable'
+import Equipable from '../../entities/Equipable'
+import Items from '../../entities/ItemList'
 
 const hasRequiredItems = (itemCounts, costs) => {
   return costs.every(required => itemCounts[required.name] >= required.quantity)
@@ -23,9 +24,9 @@ export const calculateRecipe = (items) => {
 
 const recipes = [
   {
-    item: new Equipable('Small Satellite'),
+    item: Items.SMALL_SATELLITE,
     costs: [
-      { name: 'Double Hit', quantity: 2 }
+      { name: 'Scrap Metal', quantity: 2 }
     ]
   },
   {

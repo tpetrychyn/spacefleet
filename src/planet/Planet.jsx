@@ -4,9 +4,13 @@ import { connect } from 'react-redux'
 import { placeObject, removeObject, setObjects } from '../@actions/planet'
 import { endDrag } from '../@actions/dragging'
 import { setHover } from '../@actions/ui'
+import { addItem } from '../@actions/inventory'
 import { Carousel } from 'react-responsive-carousel'
 
+import PlanetResource from './resource/PlanetResource'
+
 // import ItemSlotComponent from '../inventory/ItemSlotComponent'
+import Item from '../entities/Item'
 
 import portalImg from './portal_SE.png'
 import satImg from './satelliteDishLarge_SW.png'
@@ -48,16 +52,6 @@ const StoragePanel = styled.div`
   left: ${props => (props.left - 45) / window.innerWidth * 100 + 'vw'};
 `
 
-const RockMound = styled.div`
-  width: 200px;
-  height: 150px;
-  background-color: rgba(200,200,200,0.6);
-  position: absolute;
-  z-index: 999;
-  top: ${props => (props.top - 50) / window.innerHeight * 100 + 'vh'};
-  left: ${props => (props.left - 45) / window.innerWidth * 100 + 'vw'};
-`
-
 const itemToImage = (item) => {
   if (item.name === 'Metal Scraps') {
     return portalImg
@@ -67,15 +61,6 @@ const itemToImage = (item) => {
     return craftImg
   }
 }
-
-const RockMoundContainer = (props) => (
-  <RockMound top={props.top} left={props.left}>
-    <h4>Rock Mound</h4>
-    <h5>Contains:</h5>
-    <p>5x Space Dust</p>
-    <button className='btn btn-primary'>Harvest</button>
-  </RockMound>
-)
 
 class Planet extends React.Component {
   constructor () {
@@ -102,8 +87,12 @@ class Planet extends React.Component {
   }
 
   openStorage (selected) {
-    console.log(selected)
     this.setState({ selected })
+  }
+
+  addItem () {
+    const item = new Item('Space Dust', true)
+    this.props.addItem(item, null, 2)
   }
 
   deleteItem (object) {
@@ -124,7 +113,8 @@ class Planet extends React.Component {
                   <img src={itemToImage(o.object)} alt={o.name} />
                 </PlanetObject>
               )}
-              <RockMoundContainer top={400} left={600} />
+              <PlanetResource y={400} x={600} onClick={this.addItem.bind(this)} />
+              <PlanetResource y={350} x={1400} onClick={this.addItem.bind(this)} />
             </Ground>
           </PlanetContainer>
           <PlanetContainer>
@@ -141,7 +131,8 @@ const mapDispatchToProps = dispatch => ({
   removeObject: (object) => dispatch(removeObject(object)),
   setObjects: (objects) => dispatch(setObjects(objects)),
   endDrag: () => dispatch(endDrag()),
-  setHover: (hover) => dispatch(setHover(hover))
+  setHover: (hover) => dispatch(setHover(hover)),
+  addItem: (item, slot, amount) => dispatch(addItem(item, slot, amount))
 })
 
 const mapStateToProps = state => ({

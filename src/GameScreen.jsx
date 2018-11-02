@@ -16,6 +16,9 @@ import { connect } from 'react-redux'
 
 import portalImg from './planet/portal_SE.png'
 
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 class GameScreen extends React.Component {
   state = {x: 0, y: 0}
   didMove(e) {
@@ -51,6 +54,7 @@ class GameScreen extends React.Component {
           <button className='btn btn-small' onClick={() => this.props.setGamestate('planet')}>Open Planet</button>
           <button className='btn btn-small' onClick={() => this.props.setGamestate('auction')}>Open Auction</button>
         </div>
+        <ToastContainer />
       </div>
     )
   }

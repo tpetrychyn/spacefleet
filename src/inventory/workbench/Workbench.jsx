@@ -4,7 +4,7 @@ import { beginDrag, endDrag } from '../../@actions/dragging'
 import { addItem, removeItem } from '../../@actions/workbench'
 import { closeWorkbench, closeInventory } from '../../@actions/ui'
 
-import SupportGem from '../../shared/entities/SupportGem'
+import SupportGem from '../../entities/SupportGem'
 
 import ItemSlotComponent from '../ItemSlotComponent'
 import WorkbenchOutput from './WorkbenchOutput'
@@ -12,16 +12,6 @@ import WorkbenchOutput from './WorkbenchOutput'
 import './Workbench.css'
 
 class Workbench extends React.Component {
-  componentDidMount () {
-    const gem = new SupportGem('Double Hit')
-    gem.isStackable = true
-    this.props.addItem(gem, null, 10)
-    const gem2 = new SupportGem('Level +1')
-    gem2.backgroundColor = 'blue'
-    gem.isStackable = true
-    this.props.addItem(gem2)
-  }
-
   onHover (item) {
     if (item) { this.setState({ hoverItem: item }) }
   }
